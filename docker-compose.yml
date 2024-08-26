@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cloudrun_app
+    ports:
+      - "8080:8080"
+#    using env_file
+    env_file:
+      - .env
+#    environment:
+#      - VIA_CEP_API_URL=https://viacep.com.br/ws
+#      - WEATHER_API_URL=http://api.weatherapi.com/v1/current.json
+#      - WEATHER_API_KEY=your_key
+#      - PORT=8080
+    command: ["./cloudrun"]
+
+  cloud_run_test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+    container_name: cloudrun_test
+    env_file:
+      - .env
+    command: [ "go", "test", "./...", "-v" ]
+    restart: "no"
+
